@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الانيس - لوحة تحكم الأدمن</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1877f2;
+            --primary-light: #e7f3ff;
+            --primary-dark: #0d6efd;
+            --dark: #333;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --border: #dee2e6;
+            --shadow: 0 2px 15px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+            --radius: 12px;
+            --sidebar-width: 280px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            direction: rtl;
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        /* الشريط الجانبي */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--primary);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            right: 0;
+            overflow-y: auto;
+            transition: var(--transition);
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .admin-info {
+            flex: 1;
+        }
+        
+        .admin-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .admin-role {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 16px;
+            gap: 12px;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .menu-item i {
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* المحتوى الرئيسي */
+        .main-content {
+            flex: 1;
+            margin-right: var(--sidebar-width);
+            padding: 30px;
+            transition: var(--transition);
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .stat-title {
+            color: var(--gray);
+            font-size: 16px;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .card-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn.outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn.outline:hover {
+            background: var(--primary-light);
+        }
+        
+        .btn.success {
+            background: var(--success);
+        }
+        
+        .btn.warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+        
+        .btn.danger {
+            background: var(--danger);
+        }
+        
+        /* الجداول */
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .data-table th {
+            background: var(--primary-light);
+            padding: 15px;
+            text-align: right;
+            font-weight: 700;
+        }
+        
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .data-table tr:hover {
+            background: var(--primary-light);
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+        
+        .status-processing {
+            background: rgba(13, 110, 253, 0.2);
+            color: var(--primary-dark);
+        }
+        
+        .status-completed {
+            background: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+        }
+        
+        .status-cancelled {
+            background: rgba(220, 53, 69, 0.2);
+            color: var(--danger);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .action-btn.view {
+            background: var(--primary);
+        }
+        
+        .action-btn.edit {
+            background: var(--warning);
+        }
+        
+        .action-btn.delete {
+            background: var(--danger);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* نموذج الإضافة والتعديل */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.15);
+            outline: none;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+        
+        /* الصفحات المخفية */
+        .page-section {
+            display: none;
+        }
+        
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* تنبيهات */
+        .toast {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transform: translateY(-150%);
+            transition: transform 0.4s ease;
+            min-width: 300px;
+            border-right: 4px solid var(--primary);
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+        }
+        
+        .toast.success {
+            border-right-color: var(--success);
+        }
+        
+        .toast.error {
+            border-right-color: var(--danger);
+        }
+        
+        .toast.warning {
+            border-right-color: var(--warning);
+        }
+        
+        .toast i {
+            margin-left: 15px;
+            font-size: 24px;
+        }
+        
+        .toast.success i {
+            color: var(--success);
+        }
+        
+        .toast.error i {
+            color: var(--danger);
+        }
+        
+        .toast.warning i {
+            color: var(--warning);
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .toast-message {
+            font-size: 14px;
+        }
+        
+        /* قائمة السياق */
+        .context-menu {
+            position: absolute;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            z-index: 100;
+            min-width: 200px;
+            display: none;
+        }
+        
+        .context-menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .context-menu-item:hover {
+            background: var(--primary-light);
+        }
+        
+        /* زر القائمة المتنقلة */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--shadow);
+        }
+        
+        /* متجاوب */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(var(--sidebar-width));
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .page-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- تنبيهات -->
+    <div class="toast">
+        <i class="fas fa-check-circle"></i>
+        <div class="toast-content">
+            <div class="toast-title">نجاح!</div>
+            <div class="toast-message">تمت العملية بنجاح</div>
+        </div>
+    </div>
+    
+    <!-- زر القائمة المتنقلة -->
+    <div class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+    </div>
+    
+    <!-- الشريط الجانبي -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="admin-avatar">
+                <i class="fas fa-user-shield" style="font-size: 40px;"></i>
+            </div>
+            <div class="admin-info">
+                <div class="admin-name">محمد علي</div>
+                <div class="admin-role">مدير النظام</div>
+            </div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="#" class="menu-item active" data-page="dashboard">
+                <i class="fas fa-chart-line"></i>
+                <span>لوحة التحكم</span>
+            </a>
+            <a href="#" class="menu-item" data-page="orders">
+                <i class="fas fa-shopping-cart"></i>
+                <span>إدارة الطلبات</span>
+            </a>
+            <a href="#" class="menu-item" data-page="products">
+                <i class="fas fa-box"></i>
+                <span>إدارة المنتجات</span>
+            </a>
+            <a href="#" class="menu-item" data-page="sellers">
+                <i class="fas fa-store"></i>
+                <span>إدارة التجار</span>
+            </a>
+            <a href="#" class="menu-item" data-page="pending-profits">
+                <i class="fas fa-hourglass-half"></i>
+                <span>الأرباح المنتظرة</span>
+            </a>
+            <a href="#" class="menu-item" data-page="completed-profits">
+                <i class="fas fa-check-circle"></i>
+                <span>الأرباح المحققة</span>
+            </a>
+            <a href="#" class="menu-item" data-page="withdrawals">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>سحب الأرباح</span>
+            </a>
+            <a href="#" class="menu-item" data-page="profile">
+                <i class="fas fa-user-cog"></i>
+                <span>الملف الشخصي</span>
+            </a>
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>العودة للمتجر</span>
+            </a>
+            <a href="#" class="menu-item" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>تسجيل الخروج</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content">
+        <!-- لوحة التحكم -->
+        <div class="page-section active" id="dashboard">
+            <div class="page-header">
+                <h1 class="page-title">لوحة التحكم</h1>
+                <div class="date-display">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="currentDate">24 يوليو 2023</span>
+                </div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-title">إجمالي الطلبات</div>
+                    <div class="stat-value">1,248</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">عدد التجار</div>
+                    <div class="stat-value">86</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">المنتجات</div>
+                    <div class="stat-value">2,450</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">إجمالي الأرباح</div>
+                    <div class="stat-value">18.7M د.ع</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">الطلبات الحديثة</h2>
+                    <a href="#" class="btn" data-page="orders">عرض الكل</a>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>رقم الطلب</th>
+                                <th>العميل</th>
+                                <th>التاريخ</th>
+                                <th>المبلغ</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>AL-2023-1057</td>
+                                <td>علي حسن</td>
+                                <td>23 يوليو 2023</td>
+                                <td>425,000 د.ع</td>
+                                <td><span class="status-badge status-pending">قيد الانتظار</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>AL-2023-1056</td>
+                                <td>سارة محمد</td>
+                                <td>23 يوليو 2023</td>
+                                <td>320,500 د.ع</td>
+                                <td><span class="status-badge status-processing">جاري التجهيز</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>AL-2023-1055</td>
+                                <td>حسين أحمد</td>
+                                <td>22 يوليو 2023</td>
+                                <td>185,000 د.ع</td>
+                                <td><span class="status-badge status-completed">مكتمل</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>AL-2023-1054</td>
+                                <td>ليلى كريم</td>
+                                <td>22 يوليو 2023</td>
+                                <td>625,000 د.ع</td>
+                                <td><span class="status-badge status-cancelled">ملغي</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">آخر المنتجات المضافة</h2>
+                    <a href="#" class="btn" data-page="products">عرض الكل</a>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>الصورة</th>
+                                <th>اسم المنتج</th>
+                                <th>الفئة</th>
+                                <th>السعر</th>
+                                <th>الكمية</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/50" alt="Product" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;"></td>
+                                <td>هاتف سامسونج جالاكسي S22</td>
+                                <td>إلكترونيات</td>
+                                <td>850,000 د.ع</td>
+                                <td>15</td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                    <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/50" alt="Product" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;"></td>
+                                <td>ساعة أبل الذكية</td>
+                                <td>إلكترونيات</td>
+                                <td>420,000 د.ع</td>
+                                <td>8</td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                    <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/50" alt="Product" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;"></td>
+                                <td>غسالة سامسونج 8 كغم</td>
+                                <td>أجهزة منزلية</td>
+                                <td>1,250,000 د.ع</td>
+                                <td>3</td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                    <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- إدارة الطلبات -->
+        <div class="page-section" id="orders">
+            <div class="page-header">
+                <h1 class="page-title">إدارة الطلبات</h1>
+                <div class="filters">
+                    <select id="orderFilter">
+                        <option value="all">جميع الطلبات</option>
+                        <option value="pending">قيد الانتظار</option>
+                        <option value="processing">جاري التجهيز</option>
+                        <option value="completed">مكتمل</option>
+                        <option value="cancelled">ملغي</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>رقم الطلب</th>
+                                <th>العميل</th>
+                                <th>التاجر</th>
+                                <th>التاريخ</th>
+                                <th>المبلغ</th>
+                                <th>الربح</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>AL-2023-1057</td>
+                                <td>علي حسن</td>
+                                <td>متجر التقنية</td>
+                                <td>23 يوليو 2023</td>
+                                <td>425,000 د.ع</td>
+                                <td>75,000 د.ع</td>
+                                <td><span class="status-badge status-pending">قيد الانتظار</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>AL-2023-1056</td>
+                                <td>سارة محمد</td>
+                                <td>متجر الأجهزة</td>
+                                <td>23 يوليو 2023</td>
+                                <td>320,500 د.ع</td>
+                                <td>45,000 د.ع</td>
+                                <td><span class="status-badge status-processing">جاري التجهيز</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>AL-2023-1055</td>
+                                <td>حسين أحمد</td>
+                                <td>متجر التقنية</td>
+                                <td>22 يوليو 2023</td>
+                                <td>185,000 د.ع</td>
+                                <td>25,000 د.ع</td>
+                                <td><span class="status-badge status-completed">مكتمل</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>AL-2023-1054</td>
+                                <td>ليلى كريم</td>
+                                <td>متجر الأجهزة</td>
+                                <td>22 يوليو 2023</td>
+                                <td>625,000 د.ع</td>
+                                <td>95,000 د.ع</td>
+                                <td><span class="status-badge status-cancelled">ملغي</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- إدارة المنتجات -->
+        <div class="page-section" id="products">
+            <div class="page-header">
+                <h1 class="page-title">إدارة المنتجات</h1>
+                <button class="btn" id="addProductBtn">
+                    <i class="fas fa-plus"></i>
+                    إضافة منتج جديد
+                </button>
+            </div>
+            
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">جميع المنتجات</h2>
+                    <div class="search-box">
+                        <input type="text" placeholder="ابحث عن منتج...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>الصورة</th>
+                                <th>اسم المنتج</th>
+                                <th>الفئة</th>
+                                <th>السعر</th>
+                                <th>الكمية</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/50" alt="Product" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;"></td>
+                                <td>هاتف سامسونج جالاكسي S22</td>
+                                <td>إلكترونيات</td>
+                                <td>850,000 د.ع</td>
+                                <td>15</td>
+                                <td><span class="status-badge status-completed">متوفر</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                    <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/50" alt="Product" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;"></td>
+                                <td>ساعة أبل الذكية</td>
+                                <td>إلكترونيات</td>
+                                <td>420,000 د.ع</td>
+                                <td>8</td>
+                                <td><span class="status-badge status-completed">متوفر</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                    <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><img src="https://via.placeholder.com/50" alt="Product" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;"></td>
+                                <td>غسالة سامسونج 8 كغم</td>
+                                <td>أجهزة منزلية</td>
+                                <td>1,250,000 د.ع</td>
+                                <td>3</td>
+                                <td><span class="status-badge status-warning">كمية قليلة</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                    <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الأرباح المنتظرة -->
+        <div class="page-section" id="pending-profits">
+            <div class="page-header">
+                <h1 class="page-title">الأرباح المنتظرة</h1>
+                <div class="total-profit">
+                    <span>الإجمالي: </span>
+                    <strong>12,450,000 د.ع</strong>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>رقم الطلب</th>
+                                <th>التاجر</th>
+                                <th>تاريخ الطلب</th>
+                                <th>مبلغ الطلب</th>
+                                <th>الربح المتوقع</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>AL-2023-1057</td>
+                                <td>متجر التقنية</td>
+                                <td>23 يوليو 2023</td>
+                                <td>425,000 د.ع</td>
+                                <td>75,000 د.ع</td>
+                                <td><span class="status-badge status-pending">قيد الانتظار</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn success"><i class="fas fa-check"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>AL-2023-1056</td>
+                                <td>متجر الأجهزة</td>
+                                <td>23 يوليو 2023</td>
+                                <td>320,500 د.ع</td>
+                                <td>45,000 د.ع</td>
+                                <td><span class="status-badge status-processing">جاري التجهيز</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn success"><i class="fas fa-check"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>AL-2023-1053</td>
+                                <td>متجر التقنية</td>
+                                <td>21 يوليو 2023</td>
+                                <td>185,000 د.ع</td>
+                                <td>25,000 د.ع</td>
+                                <td><span class="status-badge status-processing">جاري التجهيز</span></td>
+                                <td class="action-buttons">
+                                    <div class="action-btn view"><i class="fas fa-eye"></i></div>
+                                    <div class="action-btn success"><i class="fas fa-check"></i></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الملف الشخصي -->
+        <div class="page-section" id="profile">
+            <div class="page-header">
+                <h1 class="page-title">الملف الشخصي</h1>
+            </div>
+            
+            <div class="content-card">
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="adminName">اسم الأدمن</label>
+                        <input type="text" id="adminName" value="محمد علي">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminEmail">البريد الإلكتروني</label>
+                        <input type="email" id="adminEmail" value="admin@alanis.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminPhone">رقم الهاتف</label>
+                        <input type="tel" id="adminPhone" value="07701234567">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminRole">الدور</label>
+                        <input type="text" id="adminRole" value="مدير النظام" disabled>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminDate">تاريخ الانضمام</label>
+                        <input type="text" id="adminDate" value="15 يناير 2023" disabled>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn outline">إلغاء</button>
+                        <button class="btn success">حفظ التغييرات</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- نموذج إضافة منتج -->
+        <div class="page-section" id="add-product">
+            <div class="page-header">
+                <h1 class="page-title">إضافة منتج جديد</h1>
+            </div>
+            
+            <div class="content-card">
+                <div class="form-container">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="productName">اسم المنتج</label>
+                                <input type="text" id="productName" placeholder="أدخل اسم المنتج">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="productCategory">الفئة</label>
+                                <select id="productCategory">
+                                    <option value="">اختر الفئة</option>
+                                    <option value="electronics">إلكترونيات</option>
+                                    <option value="home">أجهزة منزلية</option>
+                                    <option value="kitchen">أجهزة المطبخ</option>
+                                    <option value="care">أجهزة العناية</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="productPrice">سعر الجملة (د.ع)</label>
+                                <input type="number" id="productPrice" placeholder="أدخل سعر الجملة">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="productQuantity">الكمية المتاحة</label>
+                                <input type="number" id="productQuantity" placeholder="أدخل الكمية">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productDescription">وصف المنتج</label>
+                        <textarea id="productDescription" rows="4" placeholder="أدخل وصف المنتج"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productImages">صور المنتج</label>
+                        <input type="file" id="productImages" multiple>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn outline" id="cancelAddProduct">إلغاء</button>
+                        <button class="btn success">حفظ المنتج</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // إدارة التنقل بين الصفحات
+        document.addEventListener('DOMContentLoaded', function() {
+            // تعيين تاريخ اليوم
+            const today = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = today.toLocaleDateString('ar-IQ', options);
+            
+            // التنقل بين الصفحات
+            const menuItems = document.querySelectorAll('.menu-item');
+            const pageSections = document.querySelectorAll('.page-section');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if(this.id === 'logoutBtn') {
+                        if(confirm('هل تريد تسجيل الخروج؟')) {
+                            window.location.href = 'login.html';
+                        }
+                        return;
+                    }
+                    
+                    // إزالة النشط من جميع العناصر
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    pageSections.forEach(s => s.classList.remove('active'));
+                    
+                    // إضافة النشط للعنصر الحالي
+                    this.classList.add('active');
+                    
+                    // إظهار الصفحة المطلوبة
+                    const pageId = this.getAttribute('data-page');
+                    if(pageId) {
+                        document.getElementById(pageId).classList.add('active');
+                    }
+                });
+            });
+            
+            // زر إضافة منتج
+            const addProductBtn = document.getElementById('addProductBtn');
+            const cancelAddProduct = document.getElementById('cancelAddProduct');
+            
+            if(addProductBtn) {
+                addProductBtn.addEventListener('click', function() {
+                    pageSections.forEach(s => s.classList.remove('active'));
+                    document.getElementById('add-product').classList.add('active');
+                });
+            }
+            
+            if(cancelAddProduct) {
+                cancelAddProduct.addEventListener('click', function() {
+                    pageSections.forEach(s => s.classList.remove('active'));
+                    document.getElementById('products').classList.add('active');
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    document.querySelector('.menu-item[data-page="products"]').classList.add('active');
+                });
+            }
+            
+            // زر القائمة المتنقلة
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebar = document.getElementById('sidebar');
+            
+            if(mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
+            
+            // إظهار التنبيهات
+            function showToast(title, message, type = 'success') {
+                const toast = document.querySelector('.toast');
+                const toastTitle = document.querySelector('.toast-title');
+                const toastMessage = document.querySelector('.toast-message');
+                
+                toastTitle.textContent = title;
+                toastMessage.textContent = message;
+                toast.className = `toast ${type} show`;
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // محاكاة الأحداث
+            const actionButtons = document.querySelectorAll('.action-btn');
+            actionButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if(this.classList.contains('view')) {
+                        showToast('عرض التفاصيل', 'جاري تحميل تفاصيل العنصر المحدد');
+                    }
+                    else if(this.classList.contains('edit')) {
+                        showToast('تعديل العنصر', 'جاري فتح نموذج التعديل');
+                    }
+                    else if(this.classList.contains('delete')) {
+                        if(confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
+                            showToast('تم الحذف', 'تم حذف العنصر بنجاح');
+                        }
+                    }
+                    else if(this.classList.contains('success')) {
+                        showToast('تأكيد الربح', 'تم تحويل الربح إلى الأرباح المحققة');
+                    }
+                });
+            });
+            
+            // عند النقر على زر سحب الأرباح في القائمة
+            document.querySelector('.menu-item[data-page="withdrawals"]').addEventListener('click', function() {
+                showToast('سحب الأرباح', 'سيتم توجيهك إلى صفحة سحب الأرباح');
+            });
+        });
+    </script>
+</body>
+</html>

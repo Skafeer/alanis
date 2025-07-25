@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الانيس - إتمام الطلب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1877f2;
+            --primary-light: #e7f3ff;
+            --primary-dark: #0d6efd;
+            --dark: #333;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --border: #dee2e6;
+            --shadow: 0 2px 15px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            direction: rtl;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .logo i {
+            color: var(--primary-dark);
+        }
+        
+        .logo span {
+            color: var(--dark);
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .user-actions a {
+            position: relative;
+            color: var(--dark);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .user-actions a:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .checkout-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: 700;
+        }
+        
+        .step.active .step-number {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .step.completed .step-number {
+            background: var(--success);
+            color: white;
+        }
+        
+        .step-line {
+            position: absolute;
+            top: 20px;
+            right: 0;
+            left: 0;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+        
+        .checkout-form {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.15);
+            outline: none;
+        }
+        
+        .order-summary {
+            background: var(--primary-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transform: translateY(-150%);
+            transition: transform 0.4s ease;
+            min-width: 300px;
+            border-right: 4px solid var(--primary);
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+        }
+        
+        .toast.success {
+            border-right-color: var(--success);
+        }
+        
+        .toast.error {
+            border-right-color: var(--danger);
+        }
+        
+        .toast.warning {
+            border-right-color: var(--warning);
+        }
+        
+        .toast i {
+            margin-left: 15px;
+            font-size: 24px;
+        }
+        
+        .toast.success i {
+            color: var(--success);
+        }
+        
+        .toast.error i {
+            color: var(--danger);
+        }
+        
+        .toast.warning i {
+            color: var(--warning);
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .toast-message {
+            font-size: 14px;
+        }
+        
+        .confirmation-message {
+            text-align: center;
+            padding: 50px 20px;
+            display: none;
+        }
+        
+        .confirmation-message i {
+            font-size: 60px;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+        
+        .confirmation-message h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .confirmation-message p {
+            color: var(--gray);
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        .order-details {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin: 30px auto;
+            max-width: 600px;
+        }
+        
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .checkout-steps {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .step-line {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- التنبيهات -->
+    <div class="toast">
+        <i class="fas fa-check-circle"></i>
+        <div class="toast-content">
+            <div class="toast-title">نجاح!</div>
+            <div class="toast-message">تمت العملية بنجاح</div>
+        </div>
+    </div>
+    
+    <!-- شريط التنقل -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-store"></i>
+                    <span>الانيس</span>
+                </a>
+                
+                <div class="user-actions">
+                    <a href="cart.html" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                    <a href="#" id="userIcon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- المحتوى الرئيسي -->
+    <main class="container">
+        <div class="checkout-steps">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div>معلومات العميل</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>مراجعة الطلب</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>الدفع</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>التأكيد</div>
+            </div>
+            <div class="step-line"></div>
+        </div>
+        
+        <div class="checkout-form" id="checkoutForm">
+            <div class="form-section">
+                <h3 class="form-section-title">معلومات الشحن</h3>
+                
+                <div class="form-group">
+                    <label for="customerName">الاسم الكامل</label>
+                    <input type="text" id="customerName" placeholder="أدخل الاسم الكامل">
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerPhone">رقم الهاتف</label>
+                    <input type="tel" id="customerPhone" placeholder="07XXXXXXXXX">
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerAddress">العنوان التفصيلي</label>
+                    <textarea id="customerAddress" rows="3" placeholder="أدخل العنوان التفصيلي"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerNotes">ملاحظات إضافية (اختياري)</label>
+                    <textarea id="customerNotes" rows="2" placeholder="ملاحظات حول الطلب"></textarea>
+                </div>
+            </div>
+            
+            <div class="order-summary">
+                <h3>ملخص الطلب</h3>
+                <div id="orderSummary">
+                    <!-- سيتم ملء ملخص الطلب ديناميكياً -->
+                </div>
+            </div>
+            
+            <button class="btn" id="completeOrderBtn">
+                اتمام الطلب والدفع
+            </button>
+        </div>
+        
+        <div class="confirmation-message" id="confirmationMessage">
+            <i class="fas fa-check-circle"></i>
+            <h2>تم تأكيد طلبك بنجاح!</h2>
+            <p>شكراً لثقتك بمتجر الانيس، سيتم تجهيز طلبك وإرساله في أقرب وقت</p>
+            <div class="order-details">
+                <p>رقم الطلب: <strong id="orderId">AL-2023-001</strong></p>
+                <p>تاريخ الطلب: <strong id="orderDate">24 يوليو 2023</strong></p>
+                <p>حالة الطلب: <strong id="orderStatus">جاري التجهيز</strong></p>
+            </div>
+            <a href="index.html" class="btn">العودة إلى المتجر</a>
+        </div>
+    </main>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
+    
+    <script>
+        // تهيئة Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZILIIVnTNgNnEDtkEOx1QU3_Ui79KbPY",
+            authDomain: "alanis1-11962.firebaseapp.com",
+            projectId: "alanis1-11962",
+            storageBucket: "alanis1-11962.appspot.com",
+            messagingSenderId: "654645666727",
+            appId: "1:654645666727:web:edbe0f3f4c60654c510c82",
+            measurementId: "G-M0S2MQG1D5"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        
+        // متغيرات DOM
+        const cartCountElement = document.getElementById('cartCount');
+        const userIcon = document.getElementById('userIcon');
+        const orderSummary = document.getElementById('orderSummary');
+        const completeOrderBtn = document.getElementById('completeOrderBtn');
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const orderIdElement = document.getElementById('orderId');
+        const orderDateElement = document.getElementById('orderDate');
+        const orderStatusElement = document.getElementById('orderStatus');
+        const toast = document.querySelector('.toast');
+        const toastTitle = document.querySelector('.toast-title');
+        const toastMessage = document.querySelector('.toast-message');
+        const checkoutForm = document.getElementById('checkoutForm');
+        
+        // بيانات الطلب
+        let currentUser = null;
+        let cartItems = [];
+        
+        // تنسيق السعر بالدينار العراقي (محسنة)
+        function formatPrice(price) {
+            // إذا كان السعر نصًا فيه فواصل، نزيلها
+            if (typeof price === 'string') {
+                price = price.replace(/,/g, '');
+            }
+            
+            // تحويل إلى رقم
+            const num = parseInt(price);
+            
+            // تنسيق الرقم وإضافة العملة
+            return new Intl.NumberFormat('ar-IQ').format(num) + ' د.ع';
+        }
+        
+        // عرض تنبيه
+        function showToast(title, message, type = 'success') {
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // عرض ملخص الطلب
+        function renderOrderSummary() {
+            if (cartItems.length === 0) {
+                orderSummary.innerHTML = '<p>سلة التسوق فارغة</p>';
+                completeOrderBtn.disabled = true;
+                return;
+            }
+            
+            let summaryHTML = '';
+            let wholesaleTotal = 0;
+            let customerTotal = 0;
+            
+            cartItems.forEach(item => {
+                // تحويل الأسعار إلى أرقام
+                const wholesalePrice = parseInt(item.price);
+                const customerPrice = parseInt(item.customerPrice);
+                const itemWholesaleTotal = wholesalePrice * item.quantity;
+                const itemCustomerTotal = customerPrice * item.quantity;
+                
+                wholesaleTotal += itemWholesaleTotal;
+                customerTotal += itemCustomerTotal;
+                
+                summaryHTML += `
+                    <div class="order-item">
+                        <div>
+                            <strong>${item.name}</strong>
+                            <div>الكمية: ${item.quantity}</div>
+                        </div>
+                        <div>
+                            <div>سعر الجملة: ${formatPrice(itemWholesaleTotal)}</div>
+                            <div>سعر الزبون: ${formatPrice(itemCustomerTotal)}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            const profitTotal = customerTotal - wholesaleTotal;
+            const shippingCost = 5000;
+            const total = customerTotal + shippingCost;
+            
+            summaryHTML += `
+                <div class="order-item">
+                    <div>إجمالي سعر الجملة</div>
+                    <div>${formatPrice(wholesaleTotal)}</div>
+                </div>
+                <div class="order-item">
+                    <div>إجمالي سعر الزبون</div>
+                    <div>${formatPrice(customerTotal)}</div>
+                </div>
+                <div class="order-item">
+                    <div>إجمالي الربح</div>
+                    <div style="color: var(--success);">${formatPrice(profitTotal)}</div>
+                </div>
+                <div class="order-item">
+                    <div>رسوم الشحن</div>
+                    <div>${formatPrice(shippingCost)}</div>
+                </div>
+                <div class="order-item" style="font-weight: 700; border-top: 1px solid var(--border); padding-top: 10px;">
+                    <div>المبلغ الإجمالي</div>
+                    <div style="color: var(--primary);">${formatPrice(total)}</div>
+                </div>
+            `;
+            
+            orderSummary.innerHTML = summaryHTML;
+        }
+        
+        // إتمام عملية الشراء
+        async function completeOrder() {
+            const customerName = document.getElementById('customerName').value.trim();
+            const customerPhone = document.getElementById('customerPhone').value.trim();
+            const customerAddress = document.getElementById('customerAddress').value.trim();
+            const customerNotes = document.getElementById('customerNotes').value.trim();
+            
+            // التحقق من البيانات المطلوبة
+            if (!customerName || !customerPhone || !customerAddress) {
+                showToast('خطأ', 'يرجى ملء جميع الحقول المطلوبة', 'error');
+                return;
+            }
+            
+            // التحقق من صحة رقم الهاتف
+            if (!/^07\d{9}$/.test(customerPhone)) {
+                showToast('خطأ', 'رقم الهاتف يجب أن يبدأ بـ 07 ويتكون من 11 رقم', 'error');
+                return;
+            }
+            
+            // عرض حالة التحميل
+            completeOrderBtn.innerHTML = '<span class="loader"></span> جارٍ معالجة الطلب...';
+            completeOrderBtn.disabled = true;
+            
+            try {
+                const wholesaleTotal = cartItems.reduce((total, item) => total + (parseInt(item.price) * item.quantity), 0);
+                const customerTotal = cartItems.reduce((total, item) => total + (parseInt(item.customerPrice) * item.quantity), 0);
+                const profitTotal = customerTotal - wholesaleTotal;
+                const shippingCost = 5000;
+                const total = customerTotal + shippingCost;
+                
+                // إنشاء الطلب في Firestore
+                const orderRef = await db.collection('orders').add({
+                    userId: currentUser.uid,
+                    items: cartItems,
+                    customerName,
+                    customerPhone,
+                    customerAddress,
+                    customerNotes,
+                    wholesaleTotal,
+                    customerTotal,
+                    shippingCost,
+                    profitTotal,
+                    total,
+                    status: 'جديد',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // إفراغ السلة
+                await db.collection('users').doc(currentUser.uid).update({
+                    cart: []
+                });
+                
+                // إظهار رسالة التأكيد
+                checkoutForm.style.display = 'none';
+                confirmationMessage.style.display = 'block';
+                
+                // تعبئة تفاصيل الطلب
+                orderIdElement.textContent = `AL-${new Date().getFullYear()}-${orderRef.id.substring(0, 4).toUpperCase()}`;
+                orderDateElement.textContent = new Date().toLocaleDateString('ar-IQ', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // إرسال إشعار للتليجرام (اختياري)
+                // sendOrderToTelegram(orderRef.id);
+                
+            } catch (error) {
+                console.error("حدث خطأ أثناء إنشاء الطلب:", error);
+                showToast('خطأ', 'حدث خطأ أثناء معالجة الطلب', 'error');
+                completeOrderBtn.textContent = 'اتمام الطلب والدفع';
+                completeOrderBtn.disabled = false;
+            }
+        }
+        
+        // تهيئة التطبيق
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                // تحميل السلة من Firebase
+                loadCart();
+            } else {
+                showToast('تحذير', 'يجب تسجيل الدخول لإتمام الطلب', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            }
+        });
+        
+        // عند النقر على أيقونة المستخدم
+        userIcon.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentUser) {
+                if (confirm('هل تريد تسجيل الخروج؟')) {
+                    auth.signOut().then(() => {
+                        showToast('تسجيل الخروج', 'تم تسجيل الخروج بنجاح');
+                        window.location.href = 'index.html';
+                    });
+                }
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // تحميل السلة (محسنة)
+        async function loadCart() {
+            try {
+                // محاولة تحميل السلة من localStorage
+                const savedCart = localStorage.getItem('checkoutCart');
+                if (savedCart) {
+                    cartItems = JSON.parse(savedCart);
+                    renderOrderSummary();
+                    updateCartCount();
+                    localStorage.removeItem('checkoutCart'); // تنظيف بعد الاستخدام
+                    return;
+                }
+                
+                // إذا لم توجد سلة في localStorage، نحمّلها من Firebase
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    cartItems = userData.cart || [];
+                    renderOrderSummary();
+                    updateCartCount();
+                }
+            } catch (error) {
+                console.error("حدث خطأ أثناء تحميل السلة:", error);
+                showToast('خطأ', 'حدث خطأ أثناء تحميل السلة', 'error');
+            }
+        }
+        
+        // تحديث عدد العناصر في السلة
+        function updateCartCount() {
+            const count = cartItems.reduce((total, item) => total + item.quantity, 0);
+            cartCountElement.textContent = count;
+        }
+        
+        // إضافة معالجات الأحداث
+        document.addEventListener('DOMContentLoaded', () => {
+            completeOrderBtn.addEventListener('click', completeOrder);
+        });
+    </script>
+</body>
+</html>

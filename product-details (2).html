@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الانيس - تفاصيل المنتج</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1877f2;
+            --primary-light: #e7f3ff;
+            --primary-dark: #0d6efd;
+            --dark: #333;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --border: #dee2e6;
+            --shadow: 0 2px 15px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            direction: rtl;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .logo i {
+            color: var(--primary-dark);
+        }
+        
+        .logo span {
+            color: var(--dark);
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .user-actions a {
+            position: relative;
+            color: var(--dark);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .user-actions a:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .product-detail-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .product-images {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow);
+            background: white;
+        }
+        
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 20px;
+        }
+        
+        .download-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        
+        .thumbnails {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            background: white;
+            box-shadow: var(--shadow);
+        }
+        
+        .thumbnail.active {
+            border-color: var(--primary);
+        }
+        
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .product-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .product-price {
+            font-size: 24px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .product-price::after {
+            content: 'د.ع';
+            font-size: 18px;
+            margin-right: 5px;
+        }
+        
+        .product-description {
+            background: var(--primary-light);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            position: relative;
+            line-height: 1.7;
+        }
+        
+        .copy-description {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: white;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .add-to-cart {
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+        
+        .add-to-cart:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3);
+        }
+        
+        .toast {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transform: translateY(-150%);
+            transition: transform 0.4s ease;
+            min-width: 300px;
+            border-right: 4px solid var(--primary);
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+        }
+        
+        .toast.success {
+            border-right-color: var(--success);
+        }
+        
+        .toast.error {
+            border-right-color: var(--danger);
+        }
+        
+        .toast.warning {
+            border-right-color: var(--warning);
+        }
+        
+        .toast i {
+            margin-left: 15px;
+            font-size: 24px;
+        }
+        
+        .toast.success i {
+            color: var(--success);
+        }
+        
+        .toast.error i {
+            color: var(--danger);
+        }
+        
+        .toast.warning i {
+            color: var(--warning);
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .toast-message {
+            font-size: 14px;
+        }
+        
+        .quantity-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .product-detail-container {
+                flex-direction: column;
+            }
+            
+            .main-image {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- التنبيهات -->
+    <div class="toast">
+        <i class="fas fa-check-circle"></i>
+        <div class="toast-content">
+            <div class="toast-title">نجاح!</div>
+            <div class="toast-message">تمت العملية بنجاح</div>
+        </div>
+    </div>
+    
+    <!-- شريط التنقل -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-store"></i>
+                    <span>الانيس</span>
+                </a>
+                
+                <div class="user-actions">
+                    <a href="cart.html" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                    <a href="#" id="userIcon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- المحتوى الرئيسي -->
+    <main class="container">
+        <div class="product-detail-container">
+            <div class="product-images">
+                <div class="main-image">
+                    <span class="quantity-badge" id="quantityBadge">0 متبقي</span>
+                    <img id="mainImage" src="" alt="صورة المنتج الرئيسية">
+                    <div class="download-btn" id="downloadBtn">
+                        <i class="fas fa-download"></i>
+                    </div>
+                </div>
+                <div class="thumbnails" id="thumbnailsContainer">
+                    <!-- سيتم ملء الصور المصغرة ديناميكياً -->
+                </div>
+            </div>
+            
+            <div class="product-info">
+                <h1 class="product-title" id="productTitle"></h1>
+                <div class="product-price" id="productPrice"></div>
+                
+                <div class="product-description">
+                    <button class="copy-description" id="copyDescriptionBtn">
+                        <i class="fas fa-copy"></i> نسخ الوصف
+                    </button>
+                    <p id="productDescription"></p>
+                </div>
+                
+                <div class="action-buttons">
+                    <div class="add-to-cart" id="addToCartBtn">
+                        <i class="fas fa-cart-plus"></i> إضافة إلى السلة
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
+    
+    <script>
+        // تهيئة Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZILIIVnTNgNnEDtkEOx1QU3_Ui79KbPY",
+            authDomain: "alanis1-11962.firebaseapp.com",
+            projectId: "alanis1-11962",
+            storageBucket: "alanis1-11962.appspot.com",
+            messagingSenderId: "654645666727",
+            appId: "1:654645666727:web:edbe0f3f4c60654c510c82",
+            measurementId: "G-M0S2MQG1D5"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        
+        // متغيرات DOM
+        const productTitle = document.getElementById('productTitle');
+        const productPrice = document.getElementById('productPrice');
+        const productDescription = document.getElementById('productDescription');
+        const mainImage = document.getElementById('mainImage');
+        const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+        const addToCartBtn = document.getElementById('addToCartBtn');
+        const copyDescriptionBtn = document.getElementById('copyDescriptionBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const quantityBadge = document.getElementById('quantityBadge');
+        const cartCountElement = document.getElementById('cartCount');
+        const userIcon = document.getElementById('userIcon');
+        const toast = document.querySelector('.toast');
+        const toastTitle = document.querySelector('.toast-title');
+        const toastMessage = document.querySelector('.toast-message');
+        
+        // بيانات المنتج
+        let currentProduct = null;
+        let currentUser = null;
+        let cartItems = [];
+        
+        // تنسيق السعر بالدينار العراقي
+        function formatPrice(price) {
+            return new Intl.NumberFormat('ar-IQ').format(price);
+        }
+        
+        // عرض تنبيه
+        function showToast(title, message, type = 'success') {
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // جلب بيانات المنتج
+        async function loadProductDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (!productId) {
+                showToast('خطأ', 'معرف المنتج غير صالح', 'error');
+                return;
+            }
+            
+            try {
+                const doc = await db.collection('products').doc(productId).get();
+                if (doc.exists) {
+                    currentProduct = doc.data();
+                    currentProduct.id = doc.id;
+                    displayProductDetails();
+                } else {
+                    showToast('خطأ', 'المنتج غير موجود', 'error');
+                }
+            } catch (error) {
+                console.error("حدث خطأ أثناء جلب تفاصيل المنتج:", error);
+                showToast('خطأ', 'حدث خطأ أثناء تحميل تفاصيل المنتج', 'error');
+            }
+        }
+        
+        // عرض تفاصيل المنتج
+        function displayProductDetails() {
+            productTitle.textContent = currentProduct.name;
+            productPrice.textContent = formatPrice(currentProduct.price);
+            productDescription.textContent = currentProduct.description;
+            quantityBadge.textContent = `${currentProduct.quantity} متبقي`;
+            
+            // عرض الصور
+            if (currentProduct.images && currentProduct.images.length > 0) {
+                mainImage.src = currentProduct.images[0];
+                
+                currentProduct.images.forEach((img, index) => {
+                    const thumbnail = document.createElement('div');
+                    thumbnail.className = 'thumbnail';
+                    if (index === 0) thumbnail.classList.add('active');
+                    
+                    thumbnail.innerHTML = `<img src="${img}" alt="صورة ${index + 1}">`;
+                    
+                    thumbnail.addEventListener('click', () => {
+                        mainImage.src = img;
+                        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                        thumbnail.classList.add('active');
+                    });
+                    
+                    thumbnailsContainer.appendChild(thumbnail);
+                });
+            } else {
+                mainImage.src = 'https://via.placeholder.com/500?text=صورة+غير+متوفرة';
+            }
+        }
+        
+        // إضافة المنتج إلى السلة
+        function addToCart() {
+            if (!currentUser) {
+                showToast('تحذير', 'يجب تسجيل الدخول لإضافة المنتج إلى السلة', 'warning');
+                return;
+            }
+            
+            // التحقق من وجود المنتج في السلة
+            const existingItem = cartItems.find(item => item.id === currentProduct.id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cartItems.push({
+                    id: currentProduct.id,
+                    name: currentProduct.name,
+                    price: currentProduct.price,
+                    image: currentProduct.images?.[0] || '',
+                    quantity: 1,
+                    customerPrice: parseInt(currentProduct.price) + 1000
+                });
+            }
+            
+            // تحديث عدد العناصر في السلة
+            updateCartCount();
+            
+            // حفظ السلة في Firebase
+            updateCartInFirebase();
+            
+            // عرض رسالة النجاح
+            showToast('تمت الإضافة', `تمت إضافة ${currentProduct.name} إلى السلة`);
+            
+            // أنيميشن
+            addToCartBtn.classList.add('bounce');
+            setTimeout(() => {
+                addToCartBtn.classList.remove('bounce');
+            }, 800);
+        }
+        
+        // تحديث عدد العناصر في السلة
+        function updateCartCount() {
+            const count = cartItems.reduce((total, item) => total + item.quantity, 0);
+            cartCountElement.textContent = count;
+        }
+        
+        // تحديث السلة في Firebase
+        async function updateCartInFirebase() {
+            try {
+                await db.collection('users').doc(currentUser.uid).update({
+                    cart: cartItems
+                });
+            } catch (error) {
+                console.error("حدث خطأ أثناء تحديث السلة:", error);
+                showToast('خطأ', 'حدث خطأ أثناء تحديث السلة', 'error');
+            }
+        }
+        
+        // تحميل السلة من Firebase
+        async function loadCartFromFirebase() {
+            try {
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    cartItems = userData.cart || [];
+                    updateCartCount();
+                }
+            } catch (error) {
+                console.error("حدث خطأ أثناء تحميل السلة:", error);
+            }
+        }
+        
+        // نسخ وصف المنتج
+        function copyDescription() {
+            navigator.clipboard.writeText(currentProduct.description)
+                .then(() => {
+                    showToast('نجاح', 'تم نسخ الوصف بنجاح');
+                })
+                .catch(err => {
+                    showToast('خطأ', 'فشل في نسخ الوصف', 'error');
+                });
+        }
+        
+        // تنزيل الصورة
+        function downloadImage() {
+            const imageUrl = mainImage.src;
+            
+            // إنشاء عنصر <a> مخفي للتنزيل
+            const downloadLink = document.createElement('a');
+            downloadLink.href = imageUrl;
+            downloadLink.download = `product_${currentProduct.id}.jpg`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+        
+        // تهيئة التطبيق
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                // تحميل السلة من Firebase
+                loadCartFromFirebase();
+            } else {
+                currentUser = null;
+                // محاولة تحميل السلة من localStorage للزوار
+                const savedCart = localStorage.getItem('cart');
+                cartItems = savedCart ? JSON.parse(savedCart) : [];
+                updateCartCount();
+            }
+            
+            // تحميل تفاصيل المنتج
+            loadProductDetails();
+        });
+        
+        // عند النقر على أيقونة المستخدم
+        userIcon.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentUser) {
+                if (confirm('هل تريد تسجيل الخروج؟')) {
+                    auth.signOut().then(() => {
+                        showToast('تسجيل الخروج', 'تم تسجيل الخروج بنجاح');
+                        cartItems = [];
+                        localStorage.removeItem('cart');
+                        updateCartCount();
+                    });
+                }
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // إضافة معالجات الأحداث
+        document.addEventListener('DOMContentLoaded', () => {
+            addToCartBtn.addEventListener('click', addToCart);
+            copyDescriptionBtn.addEventListener('click', copyDescription);
+            downloadBtn.addEventListener('click', downloadImage);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب التاجر - الانيس</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
+    <style>
+        :root {
+            --primary: #1877f2;
+            --primary-light: #e7f3ff;
+            --primary-dark: #0d6efd;
+            --dark: #333;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --border: #dee2e6;
+            --shadow: 0 5px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+            --radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            direction: rtl;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .logo i {
+            color: var(--primary-dark);
+        }
+        
+        .logo span {
+            color: var(--dark);
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .user-actions a {
+            position: relative;
+            color: var(--dark);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .user-actions a:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* محتوى الصفحة */
+        .profile-container {
+            display: flex;
+            gap: 25px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .profile-sidebar {
+            width: 300px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+        
+        .profile-main {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        /* معلومات التاجر */
+        .seller-info {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        
+        .seller-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 36px;
+        }
+        
+        .seller-name {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .seller-id {
+            color: var(--gray);
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .seller-status {
+            display: inline-block;
+            padding: 6px 15px;
+            background: var(--success);
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 15px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .profile-links {
+            list-style: none;
+        }
+        
+        .profile-link {
+            padding: 12px 15px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: var(--transition);
+            margin-bottom: 8px;
+        }
+        
+        .profile-link:hover, .profile-link.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .profile-link i {
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* محتوى الصفحة الرئيسي */
+        .section {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        /* أرباح التاجر */
+        .profits-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .profit-card {
+            border-radius: var(--radius);
+            padding: 25px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profit-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+        }
+        
+        .profit-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .profit-card.achieved {
+            background: linear-gradient(135deg, var(--success) 0%, #1d9b4e 100%);
+        }
+        
+        .profit-card.pending {
+            background: linear-gradient(135deg, var(--warning) 0%, #e0a800 100%);
+        }
+        
+        .profit-card.withdraw {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+        
+        .profit-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .profit-title i {
+            font-size: 24px;
+        }
+        
+        .profit-amount {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        
+        .profit-description {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            border: none;
+        }
+        
+        .btn-light {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+        
+        .btn-light:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* الطلبات الحديثة */
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .orders-table th {
+            background: var(--primary-light);
+            padding: 15px 20px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .orders-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .orders-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .orders-table tr:hover {
+            background: #f8fafd;
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .status-new {
+            background: rgba(24, 119, 242, 0.1);
+            color: var(--primary);
+        }
+        
+        .status-processing {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-completed {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .view-btn {
+            padding: 6px 12px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .view-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* منتجات التاجر */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background: var(--light);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .product-image {
+            height: 180px;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-name {
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 16px;
+            height: 40px;
+            overflow: hidden;
+        }
+        
+        .product-price {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .product-price::after {
+            content: 'د.ع';
+            font-size: 14px;
+            font-weight: normal;
+            margin-right: 5px;
+        }
+        
+        .product-stock {
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: var(--radius);
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* تذييل الصفحة */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 2px;
+            background: white;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(-5px);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background: white;
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+        }
+        
+        /* تنسيقات متجاوبة */
+        @media (max-width: 992px) {
+            .profile-sidebar {
+                width: 100%;
+                position: static;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
+            .logo {
+                order: 1;
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+            
+            .user-actions {
+                order: 2;
+                position: absolute;
+                top: 20px;
+                left: 15px;
+            }
+            
+            .profits-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .orders-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+        
+        /* تحميل */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* تنبيهات */
+        .toast {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transform: translateY(-150%);
+            transition: transform 0.4s ease;
+            min-width: 300px;
+            border-right: 4px solid var(--primary);
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+        }
+        
+        .toast.success {
+            border-right-color: var(--success);
+        }
+        
+        .toast.error {
+            border-right-color: var(--danger);
+        }
+        
+        .toast.warning {
+            border-right-color: var(--warning);
+        }
+        
+        .toast i {
+            margin-left: 15px;
+            font-size: 24px;
+        }
+        
+        .toast.success i {
+            color: var(--success);
+        }
+        
+        .toast.error i {
+            color: var(--danger);
+        }
+        
+        .toast.warning i {
+            color: var(--warning);
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .toast-message {
+            font-size: 14px;
+        }
+        
+        /* الرسوم البيانية */
+        .chart-container {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .chart-content {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafd;
+            border-radius: var(--radius);
+        }
+        
+        .chart-placeholder {
+            text-align: center;
+            color: var(--gray);
+        }
+        
+        .chart-placeholder i {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+        
+        /* نافذة سحب الأرباح */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .withdrawal-modal {
+            background: white;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+        
+        .modal-overlay.active .withdrawal-modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            color: var(--danger);
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 16px;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.15);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .info-card {
+            background: var(--primary-light);
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .info-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .withdrawal-summary {
+            background: #f8f9fa;
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid var(--border);
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .summary-item:last-child {
+            margin-bottom: 0;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+            font-weight: 700;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- التنبيهات -->
+    <div class="toast">
+        <i class="fas fa-check-circle"></i>
+        <div class="toast-content">
+            <div class="toast-title">نجاح!</div>
+            <div class="toast-message">تم تحديث بياناتك بنجاح</div>
+        </div>
+    </div>
+    
+    <!-- نافذة سحب الأرباح -->
+    <div class="modal-overlay" id="withdrawalModal">
+        <div class="withdrawal-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">طلب سحب الأرباح</h3>
+                <button class="close-modal" id="closeWithdrawalModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="info-card">
+                    <div class="info-title">
+                        <i class="fas fa-info-circle"></i>
+                        <span>معلومات السحب</span>
+                    </div>
+                    <p>يمكنك سحب الأرباح المحققة فقط. الحد الأدنى للسحب هو 100,000 دينار عراقي.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="withdrawalAmount">المبلغ المراد سحبه (د.ع)</label>
+                    <input type="number" id="withdrawalAmount" placeholder="أدخل المبلغ المراد سحبه">
+                </div>
+                
+                <div class="form-group">
+                    <label for="withdrawalMethod">طريقة السحب</label>
+                    <select id="withdrawalMethod">
+                        <option value="">اختر طريقة السحب</option>
+                        <option value="bank">تحويل بنكي</option>
+                        <option value="zain">زين كاش</option>
+                        <option value="asia">آسيا هاوك</option>
+                        <option value="cash">نقداً عند الاستلام</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="accountName">اسم الحساب</label>
+                            <input type="text" id="accountName" placeholder="اسم صاحب الحساب">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="accountNumber">رقم الحساب / الهاتف</label>
+                            <input type="text" id="accountNumber" placeholder="رقم الحساب أو الهاتف">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="withdrawal-summary">
+                    <div class="summary-item">
+                        <span>الأرباح المحققة:</span>
+                        <span id="modalAchievedProfit">0 د.ع</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>المبلغ المسحوب:</span>
+                        <span id="modalWithdrawalAmount">0 د.ع</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>الأرباح المتبقية:</span>
+                        <span id="modalRemainingProfit">0 د.ع</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn outline" id="cancelWithdrawal">إلغاء</button>
+                <button class="btn success" id="confirmWithdrawal">تأكيد السحب</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- شريط التنقل -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-store"></i>
+                    <span>الانيس</span>
+                </a>
+                
+                <div class="user-actions">
+                    <a href="cart.html" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                    <a href="#" id="userIcon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- المحتوى الرئيسي -->
+    <main class="container">
+        <div class="profile-container">
+            <!-- الشريط الجانبي -->
+            <aside class="profile-sidebar">
+                <div class="seller-info">
+                    <div class="seller-avatar" id="sellerAvatar">م</div>
+                    <h2 class="seller-name" id="sellerName">متجر التقنية</h2>
+                    <div class="seller-id" id="sellerId">معرف المتجر: AL-TECH-2022</div>
+                    <div class="seller-status" id="sellerStatus">نشط</div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="productsCount">0</div>
+                        <div class="stat-label">المنتجات</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="ordersCount">0</div>
+                        <div class="stat-label">الطلبات</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="ratingValue">0.0</div>
+                        <div class="stat-label">التقييم</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="satisfactionRate">0%</div>
+                        <div class="stat-label">رضا العملاء</div>
+                    </div>
+                </div>
+                
+                <ul class="profile-links">
+                    <li>
+                        <a href="#" class="profile-link active">
+                            <i class="fas fa-chart-line"></i>
+                            <span>لوحة التحكم</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="profile-link">
+                            <i class="fas fa-box"></i>
+                            <span>المنتجات</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="profile-link">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>الطلبات</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="profile-link">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>الأرباح</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="profile-link">
+                            <i class="fas fa-cog"></i>
+                            <span>الإعدادات</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="logoutLink" class="profile-link">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>تسجيل الخروج</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+            
+            <!-- المحتوى الرئيسي -->
+            <div class="profile-main">
+                <!-- أرباح التاجر -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">أرباح التاجر</h2>
+                        <div>
+                            <button class="btn btn-light" id="withdrawBtn">
+                                <i class="fas fa-download"></i> طلب سحب أرباح
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="profits-container">
+                        <div class="profit-card achieved">
+                            <div class="profit-content">
+                                <div class="profit-title">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>الأرباح المحققة</span>
+                                </div>
+                                <div class="profit-amount" id="achievedProfit">0 د.ع</div>
+                                <div class="profit-description">الأرباح التي تم استلامها بالفعل</div>
+                                <button class="btn btn-light">
+                                    <i class="fas fa-history"></i> عرض السجل
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="profit-card pending">
+                            <div class="profit-content">
+                                <div class="profit-title">
+                                    <i class="fas fa-clock"></i>
+                                    <span>الأرباح المنتظرة</span>
+                                </div>
+                                <div class="profit-amount" id="pendingProfit">0 د.ع</div>
+                                <div class="profit-description">الأرباح التي لم يتم استلامها بعد</div>
+                                <button class="btn btn-light">
+                                    <i class="fas fa-info-circle"></i> تفاصيل
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="profit-card withdraw">
+                            <div class="profit-content">
+                                <div class="profit-title">
+                                    <i class="fas fa-wallet"></i>
+                                    <span>آخر سحب</span>
+                                </div>
+                                <div class="profit-amount" id="lastWithdraw">0 د.ع</div>
+                                <div class="profit-description" id="withdrawDate">لم يتم تنفيذ أي سحب</div>
+                                <button class="btn btn-light">
+                                    <i class="fas fa-receipt"></i> عرض الإيصال
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- الطلبات الحديثة -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">الطلبات الحديثة</h2>
+                        <div>
+                            <button class="btn btn-light" style="background: var(--primary-light); color: var(--primary);">
+                                <i class="fas fa-list"></i> عرض الكل
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>رقم الطلب</th>
+                                    <th>الزبون</th>
+                                    <th>التاريخ</th>
+                                    <th>المبلغ</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTable">
+                                <tr>
+                                    <td colspan="6" style="text-align: center;">
+                                        <i class="fas fa-spinner fa-spin"></i> جاري تحميل الطلبات...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- المنتجات الأكثر مبيعاً -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">المنتجات الأكثر مبيعاً</h2>
+                        <div>
+                            <button class="btn btn-light" style="background: var(--primary-light); color: var(--primary);">
+                                <i class="fas fa-plus"></i> إضافة منتج
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="products-grid" id="productsGrid">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="https://via.placeholder.com/300x200?text=جاري+التحميل" alt="تحميل المنتجات">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">جاري تحميل المنتجات</h3>
+                                <div class="product-price">0</div>
+                                <div class="product-stock">الكمية: 0</div>
+                                <div class="product-actions">
+                                    <button class="action-btn" disabled>
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn" disabled>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                    <button class="action-btn" disabled>
+                                        <i class="fas fa-chart-line"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- الإحصائيات -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">إحصائيات المبيعات</h3>
+                        <div>
+                            <select id="chartPeriod">
+                                <option value="week">الأسبوع الحالي</option>
+                                <option value="month">الشهر الحالي</option>
+                                <option value="quarter">ربع سنوي</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-content">
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-bar"></i>
+                            <p>سيتم عرض الرسوم البيانية هنا</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- تذييل الصفحة -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">عن الانيس</h3>
+                    <p style="color: rgba(255,255,255,0.8); margin-top: 15px; line-height: 1.7;">
+                        متجر الانيس هو منصة تجارة إلكترونية متعددة التجار تهدف إلى توفير أفضل المنتجات بأفضل الأسعار مع تجربة تسوق متميزة لعملائنا الكرام.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-chevron-left"></i> الصفحة الرئيسية</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> المتجر</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> العروض</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> من نحن</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> اتصل بنا</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">الفئات</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> إلكترونيات</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> ملابس</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> أثاث</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> كتب</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> منتجات منزلية</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">اتصل بنا</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> بغداد، العراق</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> 0770XXXXXXX</a></li>
+                        <li><a href="mailto:info@alanis.com"><i class="fas fa-envelope"></i> info@alanis.com</a></li>
+                        <li><a href="#"><i class="fas fa-clock"></i> 24/7</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 الانيس. جميع الحقوق محفوظة.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // تهيئة Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZILIIVnTNgNnEDtkEOx1QU3_Ui79KbPY",
+            authDomain: "alanis1-11962.firebaseapp.com",
+            projectId: "alanis1-11962",
+            storageBucket: "alanis1-11962.appspot.com",
+            messagingSenderId: "654645666727",
+            appId: "1:654645666727:web:edbe0f3f4c60654c510c82",
+            measurementId: "G-M0S2MQG1D5"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        
+        // متغيرات DOM
+        const toast = document.querySelector('.toast');
+        const toastTitle = document.querySelector('.toast-title');
+        const toastMessage = document.querySelector('.toast-message');
+        const userIcon = document.getElementById('userIcon');
+        const cartCount = document.getElementById('cartCount');
+        const logoutLink = document.getElementById('logoutLink');
+        const withdrawBtn = document.getElementById('withdrawBtn');
+        const withdrawalModal = document.getElementById('withdrawalModal');
+        const closeWithdrawalModal = document.getElementById('closeWithdrawalModal');
+        const cancelWithdrawal = document.getElementById('cancelWithdrawal');
+        const confirmWithdrawal = document.getElementById('confirmWithdrawal');
+        
+        // عناصر بيانات التاجر
+        const sellerAvatar = document.getElementById('sellerAvatar');
+        const sellerName = document.getElementById('sellerName');
+        const sellerId = document.getElementById('sellerId');
+        const sellerStatus = document.getElementById('sellerStatus');
+        
+        // عناصر الإحصائيات
+        const productsCount = document.getElementById('productsCount');
+        const ordersCount = document.getElementById('ordersCount');
+        const ratingValue = document.getElementById('ratingValue');
+        const satisfactionRate = document.getElementById('satisfactionRate');
+        
+        // عناصر الأرباح
+        const achievedProfit = document.getElementById('achievedProfit');
+        const pendingProfit = document.getElementById('pendingProfit');
+        const lastWithdraw = document.getElementById('lastWithdraw');
+        const withdrawDate = document.getElementById('withdrawDate');
+        
+        // عناصر نافذة السحب
+        const withdrawalAmount = document.getElementById('withdrawalAmount');
+        const modalAchievedProfit = document.getElementById('modalAchievedProfit');
+        const modalWithdrawalAmount = document.getElementById('modalWithdrawalAmount');
+        const modalRemainingProfit = document.getElementById('modalRemainingProfit');
+        
+        // جداول البيانات
+        const ordersTable = document.getElementById('ordersTable');
+        const productsGrid = document.getElementById('productsGrid');
+        
+        // بيانات التاجر
+        let currentUser = null;
+        let sellerData = {};
+        let sellerOrders = [];
+        let sellerProducts = [];
+        
+        // تنسيق الأرقام بالدينار العراقي
+        function formatPrice(price) {
+            return new Intl.NumberFormat('ar-IQ').format(price) + ' د.ع';
+        }
+        
+        // تنسيق التاريخ
+        function formatDate(dateString) {
+            if (!dateString) return 'غير متوفر';
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('ar-IQ', options);
+        }
+        
+        // عرض تنبيه
+        function showToast(title, message, type = 'success') {
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // تحميل بيانات التاجر
+        async function loadSellerData() {
+            try {
+                if (!currentUser) return;
+                
+                // جلب بيانات التاجر من Firestore
+                const docRef = db.collection('users').doc(currentUser.uid);
+                const doc = await docRef.get();
+                
+                if (doc.exists) {
+                    sellerData = doc.data();
+                    updateSellerUI();
+                    
+                    // جلب طلبات التاجر
+                    await loadSellerOrders();
+                    
+                    // جلب منتجات التاجر
+                    await loadSellerProducts();
+                } else {
+                    showToast('خطأ', 'لم يتم العثور على بيانات التاجر', 'error');
+                }
+            } catch (error) {
+                console.error("حدث خطأ أثناء تحميل بيانات التاجر:", error);
+                showToast('خطأ', 'حدث خطأ أثناء تحميل البيانات', 'error');
+            }
+        }
+        
+        // تحديث واجهة المستخدم ببيانات التاجر
+        function updateSellerUI() {
+            // تحديث معلومات التاجر
+            sellerAvatar.textContent = sellerData.storeName ? sellerData.storeName.charAt(0) : 'ت';
+            sellerName.textContent = sellerData.storeName || 'متجر جديد';
+            sellerId.textContent = `معرف المتجر: ${sellerData.userId || 'غير معروف'}`;
+            sellerStatus.textContent = sellerData.status === 'active' ? 'نشط' : 'غير نشط';
+            
+            // تحديث الإحصائيات
+            productsCount.textContent = sellerData.productsCount || 0;
+            ordersCount.textContent = sellerData.ordersCount || 0;
+            ratingValue.textContent = sellerData.rating || '0.0';
+            satisfactionRate.textContent = sellerData.satisfactionRate || '0%';
+            
+            // تحديث الأرباح
+            const achieved = sellerData.achievedProfit || 0;
+            const pending = sellerData.pendingProfit || 0;
+            const lastWithdrawAmount = sellerData.lastWithdrawal ? sellerData.lastWithdrawal.amount : 0;
+            const lastWithdrawDate = sellerData.lastWithdrawal ? sellerData.lastWithdrawal.date : null;
+            
+            achievedProfit.textContent = formatPrice(achieved);
+            pendingProfit.textContent = formatPrice(pending);
+            lastWithdraw.textContent = formatPrice(lastWithdrawAmount);
+            
+            if (lastWithdrawDate) {
+                withdrawDate.textContent = `بتاريخ ${formatDate(lastWithdrawDate)}`;
+            } else {
+                withdrawDate.textContent = 'لم يتم تنفيذ أي سحب';
+            }
+        }
+        
+        // تحميل طلبات التاجر
+        async function loadSellerOrders() {
+            try {
+                if (!currentUser) return;
+                
+                ordersTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center;">
+                            <i class="fas fa-spinner fa-spin"></i> جاري تحميل الطلبات...
+                        </td>
+                    </tr>
+                `;
+                
+                // جلب طلبات التاجر من Firestore
+                const ordersSnapshot = await db.collection('orders')
+                    .where('sellerId', '==', currentUser.uid)
+                    .orderBy('createdAt', 'desc')
+                    .limit(5)
+                    .get();
+                
+                sellerOrders = [];
+                ordersSnapshot.forEach(doc => {
+                    const order = doc.data();
+                    order.id = doc.id;
+                    sellerOrders.push(order);
+                });
+                
+                // تحديث واجهة المستخدم ببيانات الطلبات
+                updateOrdersUI();
+            } catch (error) {
+                console.error("حدث خطأ أثناء تحميل الطلبات:", error);
+                showToast('خطأ', 'حدث خطأ أثناء تحميل الطلبات', 'error');
+            }
+        }
+        
+        // تحديث واجهة المستخدم ببيانات الطلبات
+        function updateOrdersUI() {
+            if (sellerOrders.length === 0) {
+                ordersTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center;">
+                            لا توجد طلبات حتى الآن
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let ordersHTML = '';
+            
+            sellerOrders.forEach(order => {
+                let statusClass = 'status-new';
+                let statusText = 'جديد';
+                
+                if (order.status === 'processing') {
+                    statusClass = 'status-processing';
+                    statusText = 'جاري التجهيز';
+                } else if (order.status === 'completed') {
+                    statusClass = 'status-completed';
+                    statusText = 'مكتمل';
+                }
+                
+                ordersHTML += `
+                    <tr>
+                        <td>#${order.id.substring(0, 8).toUpperCase()}</td>
+                        <td>${order.customerName || 'زبون'}</td>
+                        <td>${formatDate(order.createdAt?.toDate?.())}</td>
+                        <td>${formatPrice(order.total)}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td><a href="#" class="view-btn">عرض التفاصيل</a></td>
+                    </tr>
+                `;
+            });
+            
+            ordersTable.innerHTML = ordersHTML;
+        }
+        
+        // تحميل منتجات التاجر
+        async function loadSellerProducts() {
+            try {
+                if (!currentUser) return;
+                
+                productsGrid.innerHTML = `
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200?text=جاري+التحميل" alt="تحميل المنتجات">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">جاري تحميل المنتجات</h3>
+                            <div class="product-price">0</div>
+                            <div class="product-stock">الكمية: 0</div>
+                            <div class="product-actions">
+                                <button class="action-btn" disabled>
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" disabled>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="action-btn" disabled>
+                                    <i class="fas fa-chart-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // جلب منتجات التاجر من Firestore
+                const productsSnapshot = await db.collection('products')
+                    .where('sellerId', '==', currentUser.uid)
+                    .orderBy('createdAt', 'desc')
+                    .limit(3)
+                    .get();
+                
+                sellerProducts = [];
+                productsSnapshot.forEach(doc => {
+                    const product = doc.data();
+                    product.id = doc.id;
+                    sellerProducts.push(product);
+                });
+                
+                // تحديث واجهة المستخدم ببيانات المنتجات
+                updateProductsUI();
+            } catch (error) {
+                console.error("حدث خطأ أثناء تحميل المنتجات:", error);
+                showToast('خطأ', 'حدث خطأ أثناء تحميل المنتجات', 'error');
+            }
+        }
+        
+        // تحديث واجهة المستخدم ببيانات المنتجات
+        function updateProductsUI() {
+            if (sellerProducts.length === 0) {
+                productsGrid.innerHTML = `
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x200?text=لا+يوجد+منتجات" alt="لا يوجد منتجات">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">لا توجد منتجات</h3>
+                            <div class="product-price">0</div>
+                            <div class="product-stock">الكمية: 0</div>
+                            <div class="product-actions">
+                                <button class="action-btn">
+                                    <i class="fas fa-plus"></i> إضافة منتج
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            let productsHTML = '';
+            
+            sellerProducts.forEach(product => {
+                productsHTML += `
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="${product.image || 'https://via.placeholder.com/300x200?text=صورة+المنتج'}" alt="${product.name}">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">${product.name}</h3>
+                            <div class="product-price">${formatPrice(product.price)}</div>
+                            <div class="product-stock">الكمية: ${product.quantity || 0}</div>
+                            <div class="product-actions">
+                                <button class="action-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-chart-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            productsGrid.innerHTML = productsHTML;
+        }
+        
+        // فتح نافذة سحب الأرباح
+        function openWithdrawalModal() {
+            if (!sellerData.achievedProfit || sellerData.achievedProfit < 100000) {
+                showToast('تحذير', 'يجب أن يكون الحد الأدنى للسحب 100,000 د.ع', 'warning');
+                return;
+            }
+            
+            // تحديث بيانات نافذة السحب
+            modalAchievedProfit.textContent = formatPrice(sellerData.achievedProfit);
+            withdrawalAmount.value = '';
+            withdrawalAmount.max = sellerData.achievedProfit;
+            withdrawalAmount.min = 100000;
+            withdrawalAmount.placeholder = `الحد الأدنى: ${formatPrice(100000)}`;
+            updateWithdrawalSummary();
+            
+            // عرض النافذة
+            withdrawalModal.classList.add('active');
+        }
+        
+        // تحديث ملخص السحب
+        function updateWithdrawalSummary() {
+            const amount = parseInt(withdrawalAmount.value) || 0;
+            const achieved = sellerData.achievedProfit || 0;
+            const remaining = achieved - amount;
+            
+            modalWithdrawalAmount.textContent = formatPrice(amount);
+            modalRemainingProfit.textContent = formatPrice(remaining);
+            
+            if (amount > achieved) {
+                modalRemainingProfit.style.color = 'var(--danger)';
+            } else {
+                modalRemainingProfit.style.color = '';
+            }
+        }
+        
+        // طلب سحب الأرباح
+        async function requestWithdrawal() {
+            try {
+                const amount = parseInt(withdrawalAmount.value) || 0;
+                const achieved = sellerData.achievedProfit || 0;
+                
+                // التحقق من المبلغ
+                if (amount < 100000) {
+                    showToast('تحذير', 'الحد الأدنى للسحب هو 100,000 د.ع', 'warning');
+                    return;
+                }
+                
+                if (amount > achieved) {
+                    showToast('خطأ', 'المبلغ المطلوب أكبر من الأرباح المحققة', 'error');
+                    return;
+                }
+                
+                // عرض حالة التحميل
+                confirmWithdrawal.innerHTML = '<span class="loader"></span> جارٍ معالجة الطلب...';
+                confirmWithdrawal.disabled = true;
+                
+                // إنشاء طلب سحب جديد
+                const withdrawalRef = await db.collection('withdrawals').add({
+                    sellerId: currentUser.uid,
+                    amount: amount,
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    method: document.getElementById('withdrawalMethod').value,
+                    accountName: document.getElementById('accountName').value,
+                    accountNumber: document.getElementById('accountNumber').value
+                });
+                
+                // تحديث بيانات التاجر
+                await db.collection('users').doc(currentUser.uid).update({
+                    achievedProfit: firebase.firestore.FieldValue.increment(-amount),
+                    pendingProfit: firebase.firestore.FieldValue.increment(amount),
+                    lastWithdrawal: {
+                        id: withdrawalRef.id,
+                        amount: amount,
+                        date: new Date().toISOString()
+                    }
+                });
+                
+                // إغلاق النافذة
+                withdrawalModal.classList.remove('active');
+                
+                // إعادة تحميل بيانات التاجر
+                await loadSellerData();
+                
+                showToast('نجاح', 'تم تقديم طلب سحب الأرباح بنجاح');
+            } catch (error) {
+                console.error("حدث خطأ أثناء طلب السحب:", error);
+                showToast('خطأ', 'حدث خطأ أثناء معالجة الطلب', 'error');
+                confirmWithdrawal.innerHTML = 'تأكيد السحب';
+                confirmWithdrawal.disabled = false;
+            }
+        }
+        
+        // تسجيل خروج التاجر
+        function logout() {
+            auth.signOut().then(() => {
+                showToast('تسجيل الخروج', 'تم تسجيل الخروج بنجاح');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            });
+        }
+        
+        // تهيئة التطبيق
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                loadSellerData();
+            } else {
+                // توجيه المستخدم إلى صفحة تسجيل الدخول
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // تهيئة الأحداث
+        document.addEventListener('DOMContentLoaded', () => {
+            // عند النقر على أيقونة المستخدم
+            userIcon.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentUser) {
+                    if (confirm('هل تريد تسجيل الخروج؟')) {
+                        logout();
+                    }
+                } else {
+                    window.location.href = 'login.html';
+                }
+            });
+            
+            // زر طلب سحب الأرباح
+            withdrawBtn.addEventListener('click', openWithdrawalModal);
+            
+            // رابط تسجيل الخروج
+            logoutLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+            
+            // إغلاق نافذة السحب
+            closeWithdrawalModal.addEventListener('click', () => {
+                withdrawalModal.classList.remove('active');
+            });
+            
+            cancelWithdrawal.addEventListener('click', () => {
+                withdrawalModal.classList.remove('active');
+            });
+            
+            // تحديث ملخص السحب عند تغيير المبلغ
+            withdrawalAmount.addEventListener('input', updateWithdrawalSummary);
+            
+            // تأكيد سحب الأرباح
+            confirmWithdrawal.addEventListener('click', requestWithdrawal);
+        });
+    </script>
+</body>
+</html>
