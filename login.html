@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الانيس - تسجيل الدخول</title>
+    <title>الانيس - تسجيل دخول التاجر</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -18,8 +18,9 @@
             --success: #28a745;
             --warning: #ffc107;
             --border: #dee2e6;
-            --shadow: 0 5px 15px rgba(0,0,0,0.1);
+            --shadow: 0 2px 15px rgba(0,0,0,0.08);
             --transition: all 0.3s ease;
+            --radius: 12px;
         }
         
         * {
@@ -30,7 +31,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fb 0%, #e7f3ff 100%);
+            background-color: #f5f7fb;
             color: var(--dark);
             direction: rtl;
             min-height: 100vh;
@@ -42,74 +43,71 @@
         
         .container {
             max-width: 1200px;
+            margin: 0 auto;
             width: 100%;
         }
         
         .auth-container {
             display: flex;
             background: white;
-            border-radius: 20px;
-            overflow: hidden;
+            border-radius: var(--radius);
             box-shadow: var(--shadow);
-            min-height: 600px;
-            position: relative;
-            max-width: 1000px;
+            overflow: hidden;
+            max-width: 900px;
             margin: 0 auto;
         }
         
-        .auth-illustration {
+        .auth-image {
             flex: 1;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 40px;
             color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .auth-illustration::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-        }
-        
-        .illustration-content {
             text-align: center;
-            z-index: 1;
-            max-width: 500px;
+            display: none;
         }
         
-        .illustration-content h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-            font-weight: 800;
-        }
-        
-        .illustration-content p {
-            font-size: 18px;
+        .auth-image img {
+            max-width: 250px;
             margin-bottom: 30px;
+        }
+        
+        .auth-image h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        
+        .auth-image p {
+            font-size: 16px;
             line-height: 1.6;
         }
         
-        .auth-form-container {
-            width: 45%;
-            min-width: 400px;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        .auth-form {
+            flex: 1;
+            padding: 50px;
         }
         
-        .auth-form {
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo i {
+            color: var(--primary-dark);
+        }
+        
+        .logo span {
+            color: var(--dark);
         }
         
         .auth-header {
@@ -117,205 +115,57 @@
             margin-bottom: 30px;
         }
         
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        
-        .logo span {
-            color: var(--dark);
-        }
-        
-        .auth-title {
-            font-size: 28px;
-            font-weight: 700;
+        .auth-header h2 {
+            font-size: 26px;
             color: var(--dark);
             margin-bottom: 10px;
         }
         
-        .auth-subtitle {
+        .auth-header p {
             color: var(--gray);
             font-size: 16px;
         }
         
         .form-group {
-            margin-bottom: 25px;
-            position: relative;
+            margin-bottom: 20px;
         }
         
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--dark);
-            font-size: 15px;
         }
         
-        .form-group .input-with-icon {
-            position: relative;
-        }
-        
-        .form-group .input-icon {
-            position: absolute;
-            top: 50%;
-            left: 15px;
-            transform: translateY(-50%);
-            color: var(--gray);
-        }
-        
-        .form-group input {
+        .form-control {
             width: 100%;
-            padding: 15px 15px 15px 45px;
+            padding: 14px 20px;
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: var(--radius);
             font-size: 16px;
             transition: var(--transition);
-            background: #fafbfc;
         }
         
-        .form-group input:focus {
+        .form-control:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.15);
             outline: none;
-            background: white;
         }
         
-        .password-toggle {
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon i {
             position: absolute;
             top: 50%;
-            left: 15px;
             transform: translateY(-50%);
-            cursor: pointer;
+            left: 15px;
             color: var(--gray);
         }
         
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 17px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            margin-top: 10px;
-            box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3);
-        }
-        
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(24, 119, 242, 0.4);
-        }
-        
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 20px;
-            height: 200%;
-            background: rgba(255,255,255,0.3);
-            transform: rotate(25deg);
-            transition: all 0.6s;
-        }
-        
-        .btn:hover::after {
-            right: 120%;
-        }
-        
-        .auth-footer {
-            text-align: center;
-            margin-top: 25px;
-            color: var(--gray);
-            font-size: 16px;
-        }
-        
-        .auth-footer a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-        
-        .auth-footer a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
-        }
-        
-        .login-options {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .login-option-btn {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: #fafbfc;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-        
-        .login-option-btn.active {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-        
-        .form-switch {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-        }
-        
-        .success-message {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #155724;
-            display: none;
-        }
-        
-        .success-message i {
-            font-size: 24px;
-            margin-bottom: 10px;
-            display: block;
-        }
-        
-        .loader {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .input-icon .form-control {
+            padding-right: 45px;
         }
         
         .error-message {
@@ -325,151 +175,236 @@
             display: none;
         }
         
-        .form-group.error .error-message {
-            display: block;
-        }
-        
-        .form-group.error input {
-            border-color: var(--danger);
-        }
-        
-        .guest-option {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-        }
-        
-        .guest-btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: transparent;
-            border: 2px solid var(--primary);
-            border-radius: 8px;
-            color: var(--primary);
-            font-weight: 600;
-            text-decoration: none;
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
             transition: var(--transition);
             margin-top: 10px;
         }
         
-        .guest-btn:hover {
-            background: var(--primary-light);
+        .submit-btn:hover {
+            background: var(--primary-dark);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.25);
         }
         
-        @media (max-width: 900px) {
-            .auth-illustration {
-                display: none;
-            }
-            
-            .auth-form-container {
-                width: 100%;
-                min-width: auto;
+        .submit-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .signup-link {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--gray);
+        }
+        
+        .signup-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .remember-me input {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transform: translateY(-150%);
+            transition: transform 0.4s ease;
+            min-width: 300px;
+            border-right: 4px solid var(--primary);
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+        }
+        
+        .toast.success {
+            border-right-color: var(--success);
+        }
+        
+        .toast.error {
+            border-right-color: var(--danger);
+        }
+        
+        .toast.warning {
+            border-right-color: var(--warning);
+        }
+        
+        .toast i {
+            margin-left: 15px;
+            font-size: 24px;
+        }
+        
+        .toast.success i {
+            color: var(--success);
+        }
+        
+        .toast.error i {
+            color: var(--danger);
+        }
+        
+        .toast.warning i {
+            color: var(--warning);
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .toast-message {
+            font-size: 14px;
+        }
+        
+        @media (min-width: 992px) {
+            .auth-image {
+                display: flex;
             }
         }
         
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
-            .auth-form-container {
-                padding: 30px 20px;
-            }
-            
-            .auth-title {
-                font-size: 24px;
-            }
-            
-            .form-group input {
-                padding: 13px 13px 13px 40px;
+        @media (max-width: 768px) {
+            .auth-form {
+                padding: 30px;
             }
             
             .login-options {
                 flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            body {
+                padding: 10px;
+            }
+            
+            .auth-form {
+                padding: 25px 20px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- التنبيهات -->
+    <div class="toast">
+        <i class="fas fa-check-circle"></i>
+        <div class="toast-content">
+            <div class="toast-title">نجاح!</div>
+            <div class="toast-message">تمت العملية بنجاح</div>
+        </div>
+    </div>
+    
     <div class="container">
         <div class="auth-container">
-            <div class="auth-illustration">
-                <div class="illustration-content">
-                    <h2>مرحباً بعودتك!</h2>
-                    <p>تسوق بسهولة وأمان مع متجر الانيس، حيث تجد كل ما تحتاجه بأسعار تنافسية وخدمة مميزة</p>
-                </div>
+            <div class="auth-image">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4s-4 1.79-4 4s1.79 4 4 4m0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4'/%3E%3C/svg%3E" alt="تسجيل الدخول">
+                <h1>مرحباً بعودتك!</h1>
+                <p>سجل الدخول إلى حسابك للوصول إلى لوحة تحكم التاجر</p>
+                <p>تصفح المنتجات، تتبع الطلبات، وإدارة أرباحك</p>
             </div>
             
-            <div class="auth-form-container">
-                <div class="auth-form">
-                    <div class="auth-header">
-                        <div class="logo">
-                            <i class="fas fa-store"></i>
-                            <span>الانيس</span>
+            <div class="auth-form">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-store"></i>
+                    <span>الانيس</span>
+                </a>
+                
+                <div class="auth-header">
+                    <h2>تسجيل دخول التاجر</h2>
+                    <p>أدخل بياناتك للوصول إلى حسابك في منصة الأنيس</p>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="identifier">المعرف أو رقم الهاتف</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="identifier" class="form-control" placeholder="أدخل المعرف (AL-XXXX) أو رقم الهاتف" required>
                         </div>
-                        <h2 class="auth-title">تسجيل الدخول</h2>
-                        <p class="auth-subtitle">أدخل بيانات الدخول للوصول إلى حسابك</p>
+                        <div class="error-message" id="identifierError">يرجى إدخال معرف التاجر أو رقم الهاتف</div>
                     </div>
                     
-                    <div class="success-message" id="successMessage">
-                        <i class="fas fa-check-circle"></i>
-                        <h3>تم تسجيل الدخول بنجاح!</h3>
-                        <p>جاري توجيهك إلى الصفحة الرئيسية...</p>
+                    <div class="form-group">
+                        <label for="password">كلمة المرور</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" class="form-control" placeholder="أدخل كلمة المرور" required>
+                        </div>
+                        <div class="error-message" id="passwordError">يرجى إدخال كلمة المرور</div>
                     </div>
                     
                     <div class="login-options">
-                        <div class="login-option-btn active" data-type="phone">رقم الهاتف</div>
-                        <div class="login-option-btn" data-type="id">معرف الحساب</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="loginIdentifier">رقم الهاتف / معرف الحساب</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-user input-icon"></i>
-                            <input type="text" id="loginIdentifier" placeholder="أدخل رقم الهاتف أو معرف الحساب">
+                        <div class="remember-me">
+                            <input type="checkbox" id="rememberMe">
+                            <label for="rememberMe">تذكرني</label>
                         </div>
-                        <div class="error-message" id="identifierError"></div>
+                        <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="loginPassword">كلمة المرور</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-lock input-icon"></i>
-                            <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور">
-                            <i class="fas fa-eye password-toggle" id="loginPasswordToggle"></i>
-                        </div>
-                        <div class="error-message" id="passwordError"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="auth-footer" style="text-align: left; margin-top: -10px;">
-                            <a href="#" id="forgotPassword">هل نسيت كلمة المرور؟</a>
-                        </div>
-                    </div>
-                    
-                    <button class="btn" id="loginBtn">
-                        <span id="loginText">تسجيل الدخول</span>
-                    </button>
-                    
-                    <div class="form-switch">
-                        <div class="auth-footer">
-                            ليس لديك حساب؟ <a href="signup.html">إنشاء حساب جديد</a>
-                        </div>
-                    </div>
-                    
-                    <div class="guest-option">
-                        <p>أو</p>
-                        <a href="index.html" class="guest-btn" id="browseAsGuest">
-                            <i class="fas fa-user-clock"></i> تصفح كزائر
-                        </a>
-                    </div>
+                    <button type="submit" class="submit-btn">تسجيل الدخول</button>
+                </form>
+                
+                <div class="signup-link">
+                    ليس لديك حساب؟ <a href="signup.html">أنشئ حساب جديد</a>
                 </div>
             </div>
         </div>
     </div>
-
+    
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore-compat.js"></script>
@@ -493,123 +428,68 @@
         const auth = firebase.auth();
         
         // متغيرات DOM
-        const loginBtn = document.getElementById('loginBtn');
-        const loginIdentifier = document.getElementById('loginIdentifier');
-        const loginPassword = document.getElementById('loginPassword');
-        const loginPasswordToggle = document.getElementById('loginPasswordToggle');
-        const loginOptionBtns = document.querySelectorAll('.login-option-btn');
-        const successMessage = document.getElementById('successMessage');
-        const loginText = document.getElementById('loginText');
-        const identifierError = document.getElementById('identifierError');
-        const passwordError = document.getElementById('passwordError');
-        const forgotPassword = document.getElementById('forgotPassword');
-        const browseAsGuest = document.getElementById('browseAsGuest');
+        const loginForm = document.getElementById('loginForm');
+        const toast = document.querySelector('.toast');
+        const toastTitle = document.querySelector('.toast-title');
+        const toastMessage = document.querySelector('.toast-message');
         
-        // تبديل عرض كلمة المرور
-        function togglePasswordVisibility() {
-            if (loginPassword.type === 'password') {
-                loginPassword.type = 'text';
-                loginPasswordToggle.classList.remove('fa-eye');
-                loginPasswordToggle.classList.add('fa-eye-slash');
-            } else {
-                loginPassword.type = 'password';
-                loginPasswordToggle.classList.remove('fa-eye-slash');
-                loginPasswordToggle.classList.add('fa-eye');
-            }
+        // عرض تنبيه
+        function showToast(title, message, type = 'success') {
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
         
-        // التحقق من صحة المدخلات
-        function validateInputs() {
-            let isValid = true;
-            
-            // إعادة تعيين أخطاء
-            identifierError.textContent = '';
-            passwordError.textContent = '';
-            loginIdentifier.parentElement.parentElement.classList.remove('error');
-            loginPassword.parentElement.parentElement.classList.remove('error');
-            
-            const identifier = loginIdentifier.value.trim();
-            const password = loginPassword.value;
-            const loginType = document.querySelector('.login-option-btn.active').dataset.type;
-            
-            // التحقق من معرف الدخول
-            if (!identifier) {
-                identifierError.textContent = 'هذا الحقل مطلوب';
-                loginIdentifier.parentElement.parentElement.classList.add('error');
-                isValid = false;
-            } else if (loginType === 'phone' && !/^07\d{9}$/.test(identifier)) {
-                identifierError.textContent = 'رقم الهاتف يجب أن يبدأ بـ 07 ويتكون من 11 رقم';
-                loginIdentifier.parentElement.parentElement.classList.add('error');
-                isValid = false;
-            }
-            
-            // التحقق من كلمة المرور
-            if (!password) {
-                passwordError.textContent = 'كلمة المرور مطلوبة';
-                loginPassword.parentElement.parentElement.classList.add('error');
-                isValid = false;
-            } else if (password.length < 8 || password.length > 16) {
-                passwordError.textContent = 'كلمة المرور يجب أن تكون بين 8 و 16 حرفاً';
-                loginPassword.parentElement.parentElement.classList.add('error');
-                isValid = false;
-            }
-            
-            return isValid;
+        // عرض خطأ
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
         }
         
-        // تسجيل الدخول
-        async function login() {
-            if (!validateInputs()) return;
-            
-            const identifier = loginIdentifier.value.trim();
-            const password = loginPassword.value;
-            const loginType = document.querySelector('.login-option-btn.active').dataset.type;
-            
-            let loginEmail = '';
-            
-            // عرض حالة التحميل
-            loginText.innerHTML = '<span class="loader"></span> جارٍ تسجيل الدخول...';
-            loginBtn.disabled = true;
-            
+        // إخفاء الخطأ
+        function hideError(elementId) {
+            document.getElementById(elementId).style.display = 'none';
+        }
+        
+        // تسجيل دخول التاجر
+        async function loginTrader(identifier, password) {
             try {
-                // تحديد طريقة الدخول
-                if (loginType === 'phone') {
-                    loginEmail = `${identifier}@alanis.com`;
+                // تحديد نوع المعرف (معرف تاجر أو رقم هاتف)
+                let email;
+                if (identifier.startsWith('AL-')) {
+                    // معرف تاجر
+                    email = `${identifier}@alanis.com`;
                 } else {
-                    // البحث عن معرف الحساب للحصول على رقم الهاتف
-                    const querySnapshot = await db.collection('users')
-                        .where('userId', '==', identifier)
-                        .get();
+                    // البحث في قاعدة البيانات عن التاجر باستخدام رقم الهاتف
+                    const tradersRef = db.collection('traders');
+                    const snapshot = await tradersRef.where('phone1', '==', identifier).get();
                     
-                    if (querySnapshot.empty) {
-                        throw new Error('معرف الحساب غير صحيح');
-                    }
-                    
-                    const userData = querySnapshot.docs[0].data();
-                    loginEmail = `${userData.phone}@alanis.com`;
-                }
-                
-                // تسجيل الدخول
-                const userCredential = await auth.signInWithEmailAndPassword(loginEmail, password);
-                const user = userCredential.user;
-                
-                // نقل سلة التسوق من localStorage إلى Firebase
-                const savedCart = localStorage.getItem('cart');
-                if (savedCart) {
-                    try {
-                        await db.collection('users').doc(user.uid).update({
-                            cart: JSON.parse(savedCart)
-                        });
-                        localStorage.removeItem('cart');
-                    } catch (error) {
-                        console.error("حدث خطأ أثناء نقل السلة:", error);
+                    if (snapshot.empty) {
+                        const snapshot2 = await tradersRef.where('phone2', '==', identifier).get();
+                        if (snapshot2.empty) {
+                            showError('identifierError', 'لم يتم العثور على حساب مرتبط بهذا الرقم');
+                            return;
+                        } else {
+                            const traderData = snapshot2.docs[0].data();
+                            email = `${traderData.traderId}@alanis.com`;
+                        }
+                    } else {
+                        const traderData = snapshot.docs[0].data();
+                        email = `${traderData.traderId}@alanis.com`;
                     }
                 }
                 
-                // عرض رسالة النجاح
-                successMessage.style.display = 'block';
+                // تسجيل الدخول باستخدام البريد الإلكتروني وكلمة المرور
+                await auth.signInWithEmailAndPassword(email, password);
                 
-                // توجيه المستخدم إلى الصفحة الرئيسية بعد 2 ثانية
+                // توجيه المستخدم إلى الصفحة الرئيسية
+                showToast('تم تسجيل الدخول', 'مرحباً بعودتك! جاري التوجيه...');
+                
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 2000);
@@ -617,90 +497,53 @@
             } catch (error) {
                 console.error("حدث خطأ أثناء تسجيل الدخول:", error);
                 
-                // تحديد نوع الخطأ وعرض الرسالة المناسبة
-                let errorMessage = 'بيانات الدخول غير صحيحة';
-                
-                switch (error.code) {
-                    case 'auth/user-not-found':
-                        errorMessage = 'المستخدم غير موجود';
-                        break;
-                    case 'auth/wrong-password':
-                        errorMessage = 'كلمة المرور غير صحيحة';
-                        passwordError.textContent = errorMessage;
-                        loginPassword.parentElement.parentElement.classList.add('error');
-                        break;
-                    case 'auth/too-many-requests':
-                        errorMessage = 'لقد حاولت كثيراً، يرجى المحاولة لاحقاً';
-                        break;
-                    case 'auth/invalid-email':
-                        errorMessage = 'البريد الإلكتروني غير صحيح';
-                        break;
+                let errorMessage = "حدث خطأ أثناء تسجيل الدخول";
+                if (error.code === 'auth/wrong-password') {
+                    errorMessage = "كلمة المرور غير صحيحة";
+                    showError('passwordError', 'كلمة المرور غير صحيحة');
+                } else if (error.code === 'auth/user-not-found') {
+                    errorMessage = "لم يتم العثور على حساب بهذا المعرف";
+                    showError('identifierError', 'لم يتم العثور على حساب بهذا المعرف');
                 }
                 
-                if (!passwordError.textContent) {
-                    identifierError.textContent = errorMessage;
-                    loginIdentifier.parentElement.parentElement.classList.add('error');
-                }
-                
-                loginText.textContent = 'تسجيل الدخول';
-                loginBtn.disabled = false;
+                showToast('خطأ', errorMessage, 'error');
             }
         }
         
-        // تهيئة الأحداث
-        document.addEventListener('DOMContentLoaded', () => {
-            // إضافة معالجات الأحداث
-            loginBtn.addEventListener('click', login);
-            loginPasswordToggle.addEventListener('click', togglePasswordVisibility);
+        // أحداث النموذج
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // خيارات تسجيل الدخول
-            loginOptionBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    loginOptionBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    
-                    const type = btn.dataset.type;
-                    loginIdentifier.placeholder = type === 'phone' ? 
-                        'أدخل رقم الهاتف (07XXXXXXXXX)' : 'أدخل معرف الحساب';
-                });
-            });
+            const identifier = document.getElementById('identifier').value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
             
-            // إدخال البيانات
-            loginIdentifier.addEventListener('input', function() {
-                if (this.value.trim()) {
-                    identifierError.textContent = '';
-                    this.parentElement.parentElement.classList.remove('error');
-                }
-            });
+            // إخفاء أية أخطاء سابقة
+            hideError('identifierError');
+            hideError('passwordError');
             
-            loginPassword.addEventListener('input', function() {
-                if (this.value) {
-                    passwordError.textContent = '';
-                    this.parentElement.parentElement.classList.remove('error');
-                }
-            });
+            if (!identifier) {
+                showError('identifierError', 'يرجى إدخال معرف التاجر أو رقم الهاتف');
+                return;
+            }
             
-            // نسيت كلمة المرور
-            forgotPassword.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('سيتم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني');
-            });
+            if (!password) {
+                showError('passwordError', 'يرجى إدخال كلمة المرور');
+                return;
+            }
             
-            // التصفح كزائر
-            browseAsGuest.addEventListener('click', function(e) {
-                e.preventDefault();
-                localStorage.setItem('isGuest', 'true');
-                window.location.href = 'index.html';
-            });
+            loginTrader(identifier, password);
+        });
+        
+        // محاولة التحميل التلقائي عند تذكر المستخدم
+        window.addEventListener('load', function() {
+            const rememberMe = localStorage.getItem('rememberMe') === 'true';
+            const savedIdentifier = localStorage.getItem('identifier');
             
-            // إدخال بالانتر
-            loginIdentifier.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') login();
-            });
-            
-            loginPassword.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') login();
-            });
+            if (rememberMe && savedIdentifier) {
+                document.getElementById('identifier').value = savedIdentifier;
+                document.getElementById('rememberMe').checked = true;
+            }
         });
     </script>
 </body>
